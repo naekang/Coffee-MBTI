@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <!-- Bootstrap 4.6 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+        integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+
+    <!-- css -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="container">
+    <article class="start">
+        <h1 class="mt-5 text-center">나와 잘 맞는 커피는?</h1>
+        <button type="button" class="btn btn-primary mt-5" onclick="start();">테스트 시작하기</button>
+    </article>
+
+    <article class="question">
+        <div class="progress mt-5">
+            <div class="progress-bar" role="progressbar" style="width: calc(100/12*1%)" aria-valuenow="25"
+                aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+        <h2 id="title" class="text-center mt-5">문제</h2>
+        <input id="type" type="hidden" value="EI">
+        <button id="A" type="button" class="btn btn-primary btn-lg btn-block mt-5">Block level button</button>
+        <button id="B" type="button" class="btn btn-primary btn-lg btn-block mt-5">Block level button</button>
+    </article>
+    <article class="result">
+        <img id="img" src="profile.jpeg" class="rounded-circle mt-5" alt="">
+        <h2 id="animal" class="text-center mt-5">커피 이름</h2>
+        <h3 id="explain" class="text-center mt-5">설명</h3>
+
+        <!-- Go to www.addthis.com/dashboard to customize your tools -->
+        <div class="addthis_inline_share_toolbox"></div>
+
+    </article>
+
+
+    <input type="hidden" id="EI" value="0">
+    <input type="hidden" id="SN" value="0">
+    <input type="hidden" id="TF" value="0">
+    <input type="hidden" id="JP" value="0">
+
+
+
+
+
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns"
+        crossorigin="anonymous"></script>
+
+    <script>
+        var num = 1;
+        var q = {
+            1: { "title": "카페를 선택하는 기준은?", "type": "EI", "A": "카페는 역시 인스타지", "B": "조용히 책에 집중하고 싶어" },
+            2: { "title": "카페에 왔는데 너무 배고프다 어쩌지?", "type": "EI", "A": "배고픈게 중요하다 당연히 카페에서 잔치를 한다", "B": "혼자 먹고있으면 사람들이 이상하게 보지는 않을까 ㅠ" },
+            3: { "title": "따아를 주문했는데 아아가 나왔다", "type": "EI", "A": "난 따아가 싫어! 가서 다시 만들어달라고 한다", "B": "알바도 바빠서 착각했나보다 그냥 먹는다." },
+            4: { "title": "친구가 카페를 골랐다 어떤 카페일까", "type": "SN", "A": "카페에 대한 정보를 찾아보며 맘에 안들면 다시 고른다", "B": "당연히 좋은 카페일거야! 그냥 믿고 간다" },
+            5: { "title": "카페 가는길을 잘 못찾겠다", "type": "SN", "A": "지름길이고 뭐고 필요없어! 카카오맵이 짱이야!", "B": "분명 지름길이 있을텐데... 나는 콜롬버스!" },
+            6: { "title": "친구가 내가 갔던 카페에 대해 물어본다", "type": "SN", "A": "아 그 카페 콘센트도 많고 책상도 넓고... 나는 설명충", "B": "좋아! 빨리 가봐!" },
+            7: { "title": "카페에 들어가서 주문하는 사이에 대기가 많이 밀렸다", "type": "TF", "A": "음... 뭘 먹어야 맛있게 먹을 수 있을까? 적당히 달면서 상콤한게 없나...", "B": "직원분 힘들겠다 전 그냥 아아 주세요!" },
+            8: { "title": "친구가 커피를 시켰는데 맛없다고 한다", "type": "TF", "A": "무슨 원두 시켰는데? 어떤면에서 별로야?", "B": "헐ㅠ 내꺼 나눠 먹을래?" },
+            9: { "title": "내가 제일 별로라고 생각했던 카페를 친구가 무슨일이 있어도 간다고 한다", "type": "TF", "A": "괜히 가서 후회하지 말고 다른데 가!", "B": "그래 너가 가고싶으면 가야지! 다음에 내가 맛있는 곳 데리고 갈게!" },
+            10: { "title": "맛있는 커피를 추천 받았다", "type": "JP", "A": "그 커피를 바로 시킨다", "B": "지금 저건 별론데 나중에 먹어보지 뭐" },
+            11: { "title": "정말 친절하고 서비스가 좋은 카페지만 커피가 별로다", "type": "JP", "A": "다 좋은데 커피가 별로면 안좋은 카페지!", "B": "커피는 별로였지만 그래도 사장님의 친절함이 너무 좋았어! 가자!" },
+            12: { "title": "3시에 친구랑 카페에서 만나기로 했다(아직 결정된 건 없는 상태)", "type": "JP", "A": "음... 너와 나의 거리를 고려해서 후문에서 만나고 3시부터 6시까지 공부하고 저녁은 ...", "B": "만나서 정하자!" }
+        }
+        var result = {
+            "ISTJ": { "animal": "하마", "explain": "하마 설명", "img": "profile.jpeg" },
+            "ISFJ": { "animal": "부엉이", "explain": "사자 설명", "img": "profile.jpeg" },
+            "INFJ": { "animal": "물소", "explain": "호랑이 설명", "img": "profile.jpeg" },
+            "INTJ": { "animal": "치타", "explain": "호랑이 설명", "img": "profile.jpeg" },
+            "ISTP": { "animal": "나무늘보", "explain": "호랑이 설명", "img": "profile.jpeg" },
+            "ISFP": { "animal": "거북이", "explain": "호랑이 설명", "img": "profile.jpeg" },
+            "INFP": { "animal": "코끼리", "explain": "호랑이 설명", "img": "profile.jpeg" },
+            "INTP": { "animal": "침팬지", "explain": "호랑이 설명", "img": "profile.jpeg" },
+            "ESTP": { "animal": "악어", "explain": "호랑이 설명", "img": "profile.jpeg" },
+            "ESFP": { "animal": "미어캣", "explain": "호랑이 설명", "img": "profile.jpeg" },
+            "ENFP": { "animal": "사자", "explain": "호랑이 설명", "img": "profile.jpeg" },
+            "ENTP": { "animal": "태양새", "explain": "호랑이 설명", "img": "profile.jpeg" },
+            "ESTJ": { "animal": "기린", "explain": "호랑이 설명", "img": "profile.jpeg" },
+            "ESFJ": { "animal": "고릴라", "explain": "호랑이 설명", "img": "profile.jpeg" },
+            "ENTJ": { "animal": "카피바라", "explain": "호랑이 설명", "img": "profile.jpeg" },
+            "ENTJ": { "animal": "호랑이", "explain": "호랑이 설명", "img": "profile.jpeg" }
+        }
+        function start() {
+            $(".start").hide();
+            $(".question").show();
+            next();
+        }
+        $("#A").click(function () {
+            var type = $("#type").val();
+            var preValue = $("#" + type).val();
+            $("#" + type).val(parseInt(preValue) + 1);
+            next();
+        });
+        $("#B").click(function () {
+            next();
+        });
+        function next() {
+            if (num === 13) {
+                $(".question").hide();
+                $(".result").show();
+                var mbti = "";
+                ($("#EI").val() < 2) ? mbti += "I" : mbti += "E";
+                ($("#SN").val() < 2) ? mbti += "N" : mbti += "S";
+                ($("#TF").val() < 2) ? mbti += "F" : mbti += "T";
+                ($("#JP").val() < 2) ? mbti += "P" : mbti += "J";
+                alert(mbti);
+                $("#img").attr("src", result[mbti]["img"]);
+                $("#animal").html(result[mbti]["animal"]);
+                $("#explain").html(result[mbti]["explain"]);
+            } else {
+                $(".progress-bar").attr('style', 'width: calc(100/12*' + num + '%)');
+                $("#title").html(q[num]["title"]);
+                $("#type").val(q[num]["type"]);
+                $("#A").html(q[num]["A"]);
+                $("#B").html(q[num]["B"]);
+                num++;
+            }
+
+        }
+    </script>
+    <!-- Go to www.addthis.com/dashboard to customize your tools -->
+    <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-60644a9626397666"></script>
+
+</body>
+
+</html>
